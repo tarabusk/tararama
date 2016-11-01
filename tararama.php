@@ -2,7 +2,7 @@
 /*
 Plugin Name: tararama
 Plugin URI:  
-Description: Ajout d'un diaporama dans le contenu d'une page / post sous forme de shortcode : [tararama ids="1,2,3" auto="true" pause="3000" orderby=""post__in"]. Ajout d'un bouton sur la barre d'outils.
+Description: Shortcode to display a slider: [tararama ids="1,2,3" auto="true" pause="3000" orderby=""post__in"]. A button will be added to the toolbar to help you build the shortcode.
 Version: 1.0
 Author: Gaëlle Vaudaine
 Author URI: http://tarabusk.net
@@ -18,6 +18,7 @@ class tararama_shortcode {
         add_action('media_buttons', array(__CLASS__, 'tararama_add_media_button') );
 		
 		add_action( 'wp_enqueue_scripts',  array(__CLASS__, 'tararama_styles') );
+		add_action('wp_enqueue_media',  array(__CLASS__, 'tararama_include_media_button_js_file'));
 		
 		add_action('init', array(__CLASS__, 'register_script'));
 		add_action('wp_footer', array(__CLASS__, 'print_script'));
@@ -116,7 +117,7 @@ class tararama_shortcode {
 	static function register_script() {
 		
 		wp_register_script( 'tarama-bxslider',  plugin_dir_url( __FILE__ ) . '/js/jquery.bxslider.min.js', array( 'jquery' ),'', false );
-		wp_register_script( 'tarama-script',  plugin_dir_url( __FILE__ ) . '/scripts.js', array( 'jquery' ),'', false );
+		//wp_register_script( 'tarama-script',  plugin_dir_url( __FILE__ ) . '/scripts.js', array( 'jquery' ),'', false );
 	}
 
 	
@@ -124,6 +125,11 @@ class tararama_shortcode {
 	{
 		wp_enqueue_style( 'tarama-style',  plugin_dir_url( __FILE__ ).'/style.css' );
 	}
+	
+	static function tararama_include_media_button_js_file() {   
+		wp_enqueue_script( 'tarama-script',  plugin_dir_url( __FILE__ ) . '/scripts.js', array( 'jquery' ),'', false );
+	}
+	
 
 
 
@@ -133,7 +139,7 @@ class tararama_shortcode {
 			return;
         // script called only if shorcode called
 		wp_print_scripts('tarama-bxslider');
-		wp_print_scripts('tarama-script');
+		
 	}
 }
 
